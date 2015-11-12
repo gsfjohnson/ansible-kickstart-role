@@ -34,15 +34,17 @@ network --device=bootif --noipv6 --bootproto=dhcp   --onboot=on --activate
 firewall --disabled
 
 # Root password
-{% if ks_rootpw is defined %}
-rootpw --iscrypted {{ks_rootpw}}
+{% if item.rootpw is defined %}
+rootpw --iscrypted {{item.rootpw}}
 {% endif %}
 
 # Do not configure the X Window System
 skipx
 
+{% if item.tz is defined and item.tz %}
 # System timezone
-timezone {{ks_timezone}} --isUtc
+timezone {{item.tz}} --isUtc
+{% endif %}
 
 # System bootloader configuration
 bootloader --location=mbr --boot-drive=sda
@@ -60,4 +62,10 @@ reboot
 {% endfor %}
 
 %end
+
+{% if item.post is defined %}
+%post
+{{item.post}}
+%end
+{% endif %}
 
