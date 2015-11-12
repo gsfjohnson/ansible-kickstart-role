@@ -1,0 +1,11 @@
+---
+
+- name: create kickstart file
+  template:
+    src=kickstart.j2
+    dest={{item.file}}
+    owner=root
+    group=root
+    mode=0644
+  with_items: ks_files
+
